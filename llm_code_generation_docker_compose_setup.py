@@ -3,30 +3,31 @@ import configparser
 COLOR_OK = '\033[92m'
 COLOR_DEFAULT = '\033[0m'
 
-print("import config/config.ini ", end="")
+print("import config/config.ini", end="")
 config = configparser.ConfigParser()
 config.read("config/config.ini")
-print(COLOR_OK + "OK" + COLOR_DEFAULT)
+print(COLOR_OK + " OK" + COLOR_DEFAULT)
 
-print("set OpenAI API key ", end="")
+print("set OpenAI API key", end="")
 import os
 OPEN_AI_KEY = config.get("OpenAI", "OPEN_AI_KEY")
 os.environ["OPENAI_API_KEY"] = OPEN_AI_KEY
-print(COLOR_OK + "OK" + COLOR_DEFAULT)
+print(COLOR_OK + " OK" + COLOR_DEFAULT)
 
+print("import LangChain & LangGraph libs", end="")
 from langchain.chat_models import init_chat_model
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph_reflection import create_reflection_graph
 from openevals import create_llm_as_judge
+print(COLOR_OK + " OK" + COLOR_DEFAULT)
 
-
-exit(0)
-
-
+print("init call model", end="")
 def call_model(state: dict) -> dict:
     model = init_chat_model(model="gpt-4o-mini", openai_api_key = OPEN_AI_KEY)
     return {"messages": model.invoke(state["messages"])}
+print(COLOR_OK + " OK" + COLOR_DEFAULT)
 
+print("init eval prompt", end="")
 EVALUATION_PROMPT = """You are an expert judge evaluating AI responses. Your task is to critique the AI assistant's latest response in the conversation below.
 
 Evaluate the response based on these criteria:
@@ -46,6 +47,10 @@ Be detailed in your critique so the assistant can understand exactly how to impr
 <response>
 {outputs}
 </response>"""
+print(COLOR_OK + " OK" + COLOR_DEFAULT)
+
+exit(0)
+
 
 def judge_response(state: dict) -> dict | None:
     print()
