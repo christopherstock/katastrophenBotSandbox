@@ -14,12 +14,49 @@ OPEN_AI_KEY = config.get("OpenAI", "OPEN_AI_KEY")
 os.environ["OPENAI_API_KEY"] = OPEN_AI_KEY
 print(COLOR_OK + " OK" + COLOR_DEFAULT)
 
-print("import LangChain & LangGraph libs", end="")
+print("import OpenAI libs", end="")
+import openai
 from langchain.chat_models import init_chat_model
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph_reflection import create_reflection_graph
 from openevals import create_llm_as_judge
 print(COLOR_OK + " OK" + COLOR_DEFAULT)
+
+
+
+
+
+def generate_text(prompt, model="gpt-3.5-turbo-instruct", max_tokens=50):
+    try:
+        response = openai.completions.create(
+            model=model,
+            prompt=prompt,
+            max_tokens=max_tokens,
+            n=1,
+            stop=None,
+            temperature=0.7,
+        )
+        return response.choices[0].text.strip()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+if __name__ == "__main__":
+    # Replace with your desired prompt
+    my_prompt = "Write a short poem about Würzburg-Zellerau."
+    generated_text = generate_text(my_prompt)
+
+    if generated_text:
+        print(f"Generated Text:\n{generated_text}")
+
+
+exit(0)
+
+
+
+
+
 
 print("init call model", end="")
 def call_model(state: dict) -> dict:
