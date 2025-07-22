@@ -19,7 +19,7 @@ import openai
 print(COLOR_OK + " OK" + COLOR_DEFAULT)
 
 print("specify text generation method", end="")
-def generate_text(prompt, model="gpt-4o-mini", max_tokens=1000):
+def generate_text(prompt, model="gpt-4o-mini", max_tokens=10000):
     try:
         response = openai.completions.create(
             model=model,
